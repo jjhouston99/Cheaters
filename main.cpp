@@ -28,12 +28,12 @@ int getdir (string dir, vector<string> &files)
     return 0;
 }
 
-int hashFunction(string & s){
-    int index = 0;
-    for(int i = 1; i <= s.size();i++){
-        index = int(index + s[i] * pow(17,i));
+unsigned long hashFunction(string & s){
+    unsigned long index = 0;
+    for(int i = 0; i < s.size();i++){
+        index = index + unsigned (long(s[i] * pow(7,double(i))));
     }
-    return index;
+    return index % SIZE;
 }
 
 int main()
@@ -43,23 +43,24 @@ int main()
     getdir(dir,files);
     list<int> *hashTable;
     hashTable = new list<int>[SIZE];
-    deque<string> buffer;
     string s;
     string combine;
-    int hashIndex;
+    unsigned long hashIndex;
+    int test = files.size();
+    for (unsigned int i = 2; i < files.size(); i++) {
+        cout << files[i] << endl;
+    }
     int grid[files.size()][files.size()];
     for(int i =2; i < files.size(); i++){
-        for(int j =0; i < files.size(); j++){
+        for(int j =0; j < files.size(); j++){
             grid[i][j] = 0;
         }
     }
-    for(int i = 2 ; i < files.size(); i++) {
-        string filedir = dir + '/' + files[i];
+    //for(int i = 2 ; i < files.size(); i++) {
+        string filedir = dir + '/' + files[2]; //change to i
         ifstream inFile;
         inFile.open(filedir.c_str());
-        for (unsigned int i = 2; i < files.size(); i++) {
-            cout << files[i] << endl;
-        }
+        deque<string> buffer;
         for (int i = 0; i < 6; i++) {
             inFile >> s;
             buffer.push_back(s);
@@ -69,13 +70,13 @@ int main()
                 combine += *it;
             }
             hashIndex = hashFunction(combine);
-            hashTable[hashIndex].push_back(i);
+                hashTable[hashIndex].push_back(2); //change to i
             buffer.pop_front();
             inFile >> s;
             buffer.push_back(s);
             combine = "";
         }
-    }
+    //}
 
     for(int i =0; i < files.size(); i++){
 
